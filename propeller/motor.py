@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import RPi.GPIO as GPIO
 import time
 from flask import Flask
 from flask import jsonify
 
-MotorPin_A  = 11
+MotorPin_A  = 13
 MotorPin_B  = 12
 
 app = Flask(__name__)
@@ -34,7 +34,7 @@ def motor_togggle():
 		motorStop()
 	else:
 		motor(1,1)
-	return jsonify(motor=GPIO.input(MotorPin_A),motor2=GPIO.input(MotorPin_B))	
+	return jsonify(motor=GPIO.input(MotorPin_A),motor2=GPIO.input(MotorPin_B))
 
 def motorStop():
 	GPIO.output(MotorPin_A, GPIO.HIGH)
@@ -75,7 +75,6 @@ def destroy():
 
 
 if __name__ == '__main__':     # Program start from here
-
 	setup()
 	try:
 		app.run(debug=True,host="0.0.0.0")
