@@ -29,17 +29,38 @@ import time
 import Image
 import ImageDraw
 import ImageFont
+from flask import Flask
+from flask import jsonify
 
 epd = epd2in13.EPD()
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+	return jsonify(result='Hello World')
+
+@app.route('/api/bad')
+def bad():
+	showInk("bad")
+	return jsonify("bad")
+
+@app.route('/api/good')
+def good():
+	showInk("good")
+	return jsonify("good")
 
 def init():
     epd.init(epd.lut_full_update)
 
-def show(face):
+def showInk(face):
     image = Image.open(face + '.bmp')
     epd.set_frame_memory(image, 0, 0)
     epd.display_frame()
 
 if __name__ == '__main__':
     init()
-    show("bad")
+    showInk("bad")
+    try:
+        app.run(debug=True,host="0.0.0.0")
+    except KeyboardInterrupt:
+        destroy()
