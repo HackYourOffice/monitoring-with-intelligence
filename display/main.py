@@ -31,6 +31,7 @@ import ImageDraw
 import ImageFont
 from flask import Flask
 from flask import jsonify
+from flask import request
 
 epd = epd2in13.EPD()
 app = Flask(__name__)
@@ -39,15 +40,11 @@ app = Flask(__name__)
 def hello_world():
 	return jsonify(result='Hello World')
 
-@app.route('/api/bad')
-def bad():
-	showInk("bad")
-	return jsonify("bad")
-
-@app.route('/api/good')
-def good():
-	showInk("good")
-	return jsonify("good")
+@app.route("/display")
+def display():
+    face = request.args.get('face')
+    showInk(face)
+    return jsonify(face)
 
 def init():
     epd.init(epd.lut_full_update)
